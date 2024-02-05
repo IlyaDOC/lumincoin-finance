@@ -139,6 +139,5 @@ export class Router {
         this.titleElement.innerText = newRoute.title;
         newRoute.load();
 
-
     }
 }

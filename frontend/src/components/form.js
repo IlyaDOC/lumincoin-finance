@@ -1,3 +1,5 @@
+import config from "../../config/config.js";
+
 export class Form {
     constructor(page) {
         this.page = page;
@@ -8,6 +10,7 @@ export class Form {
         this.password = document.getElementById('password');
         this.confirmPassword = document.getElementById('confirm-password');
         this.processElement = document.getElementById('process');
+        this.rememberElement = document.getElementById('remember-me');
 
         if (location.hash === '#/signup' || location.hash === '#/login') {
             this.sidebarElement.style.display = 'none';
@@ -44,13 +47,16 @@ export class Form {
             );
         }
 
-        const that = this;
 
+        const that = this;
         this.fields.forEach(item => {
             item.element = document.getElementById(item.id);
             item.element.addEventListener('input', function () {
                 that.validateField.call(that, item, this);
             });
+        });
+        this.processElement.addEventListener('click', ()=> {
+           this.processForm();
         });
 
     }
@@ -93,5 +99,55 @@ export class Form {
             }
             this.validateForm();
         });
+    };
+
+    async processForm() {
+        if (this.validateForm()) {
+            const fullNameValue = this.fields.find(item => item.name === 'fullName').element.value;
+            const fullNameArray = fullNameValue.split(' ');
+            const name = fullNameArray[1];
+            const lastName = fullNameArray[0];
+            const email = this.fields.find(item => item.name === 'email').element.value;
+            const password = this.fields.find(item => item.name === 'password').element.value;
+            const passwordRepeat = this.confirmPassword.value;
+
+            if (this.page === 'signup') {
+                try {
+                    const response = await fetch(config.host + '/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: name,
+                            lastName: lastName,
+                            email: email,
+                            password: password,
+                            passwordRepeat: passwordRepeat
+                        })
+                    });
+
+                    if (response.status < 200 || response.status >= 300) {
+                        throw new Error(response.message);
+                    }
+
+                    const result = await response.json();
+
+                    if (result) {
+                        if (result.error || !result.user) {
+                            throw new Error(result.message);
+                        }
+
+                        location.href = '#/main';
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+
+            } else {
+
+            }
+        }
     };
 }

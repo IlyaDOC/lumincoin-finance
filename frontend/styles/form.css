@@ -84,3 +84,16 @@
     line-height: normal;
 }
 
+.form-remember {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 23px;
+    & label {
+        margin-left: 12px;
+    }
+    & input {
+        margin-bottom: 1px;
+    }
+}
