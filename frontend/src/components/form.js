@@ -1,4 +1,6 @@
 import config from "../../config/config.js";
+import {CustomHttp} from "../services/custom-http.js";
+import {Auth} from "../services/auth.js";
 
 export class Form {
     constructor(page) {
@@ -10,7 +12,6 @@ export class Form {
         this.password = document.getElementById('password');
         this.confirmPassword = document.getElementById('confirm-password');
         this.processElement = document.getElementById('process');
-        this.rememberElement = document.getElementById('remember-me');
 
         if (location.hash === '#/signup' || location.hash === '#/login') {
             this.sidebarElement.style.display = 'none';
@@ -55,8 +56,8 @@ export class Form {
                 that.validateField.call(that, item, this);
             });
         });
-        this.processElement.addEventListener('click', ()=> {
-           this.processForm();
+        this.processElement.addEventListener('click', () => {
+            this.processForm();
         });
 
     }
@@ -75,7 +76,7 @@ export class Form {
 
     validateForm() {
         const validForm = this.fields.every(item => item.valid);
-        const isValid = validForm && this.confirmFlag;
+        const isValid = this.confirmPassword ? validForm && this.confirmFlag : validForm;
         if (isValid) {
             this.processElement.classList.remove('disabled');
         } else {
@@ -103,51 +104,65 @@ export class Form {
 
     async processForm() {
         if (this.validateForm()) {
-            const fullNameValue = this.fields.find(item => item.name === 'fullName').element.value;
-            const fullNameArray = fullNameValue.split(' ');
-            const name = fullNameArray[1];
-            const lastName = fullNameArray[0];
+
             const email = this.fields.find(item => item.name === 'email').element.value;
             const password = this.fields.find(item => item.name === 'password').element.value;
-            const passwordRepeat = this.confirmPassword.value;
+
 
             if (this.page === 'signup') {
+                const fullNameValue = this.fields.find(item => item.name === 'fullName').element.value;
+                const fullNameArray = fullNameValue.split(' ');
+                const name = fullNameArray[1];
+                const lastName = fullNameArray[0];
+                const passwordRepeat = this.confirmPassword.value;
                 try {
-                    const response = await fetch(config.host + '/signup', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/json',
-                            'Accept': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            name: name,
-                            lastName: lastName,
-                            email: email,
-                            password: password,
-                            passwordRepeat: passwordRepeat
-                        })
-                    });
-
-                    if (response.status < 200 || response.status >= 300) {
-                        throw new Error(response.message);
-                    }
-
-                    const result = await response.json();
+                    const result = await CustomHttp.request(config.host + '/signup', 'POST', {
+                        name: name,
+                        lastName: lastName,
+                        email: email,
+                        password: password,
+                        passwordRepeat: passwordRepeat
+                    })
 
                     if (result) {
                         if (result.error || !result.user) {
                             throw new Error(result.message);
                         }
-
-                        location.href = '#/main';
                     }
                 } catch (error) {
-                    console.log(error);
+                    return console.log(error);
                 }
 
-            } else {
-
             }
+            try {
+                let rememberValue = false;
+                if (this.page === 'login') {
+                    rememberValue = document.getElementById('remember-me').checked;
+                }
+
+                const result = await CustomHttp.request(config.host + '/login', 'POST', {
+                    email: email,
+                    password: password,
+                    rememberMe: rememberValue
+                })
+
+                if (result) {
+                    if (result.error || !result.tokens.accessToken || !result.tokens.refreshToken
+                        || !result.user.name || !result.user.lastName || !result.user.id) {
+                        throw new Error(result.message);
+                    }
+                    Auth.setTokens(result.tokens.accessToken, result.tokens.refreshToken);
+                    Auth.setUserInfo({
+                        name: result.user.name,
+                        lastName: result.user.lastName,
+                        userId: result.user.id
+                    })
+                    location.href = '#/main';
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
         }
     };
 }

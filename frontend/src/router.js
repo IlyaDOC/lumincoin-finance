@@ -1,16 +1,15 @@
 import {Form} from "./components/form.js";
 import {Main} from "./components/main.js";
-import {Navbar} from "./components/navbar.js";
 import {Income} from "./components/income.js";
 import {Expenses} from "./components/expenses.js";
 import {IncomeAndExpenses} from "./components/income-and-expenses.js";
+import {Auth} from "./services/auth.js";
 export class Router {
     constructor() {
         this.contentElement = document.getElementById('content');
         this.titleElement = document.getElementById('page-title');
-        this.profileElement = document.getElementById('profile');
-        this.profileFullNameElement = document.getElementById('sidebar-user-name');
         this.stylesElement = document.getElementById('styles');
+        this.userNameElement = document.getElementById('sidebar-user-name');
 
         this.routes = [
             {
@@ -137,6 +136,13 @@ export class Router {
         this.contentElement.innerHTML =
             await fetch(newRoute.template).then(response => response.text());
         this.titleElement.innerText = newRoute.title;
+
+        const userInfo = Auth.getUserInfo();
+        const accessToken = localStorage.getItem(Auth.accessTokenKey);
+        if (userInfo && accessToken) {
+            this.userNameElement.innerHTML = `${userInfo.name} ${userInfo.lastName}`;
+        }
+
         newRoute.load();
 
     }
