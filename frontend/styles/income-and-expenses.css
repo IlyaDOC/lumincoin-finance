@@ -1,0 +1,24 @@
+.income-and-expenses-buttons {
+    margin-bottom: 40px;
+}
+
+.table tr th {
+    color: #052C65;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 1.333px;
+}
+
+.table th, td {
+    text-align: center;
+}
+
+.delete-action, .edit-action {
+    cursor: pointer;
+    display: inline-block;
+}
+
+.edit-action {
+    margin-left: 10px;
+}

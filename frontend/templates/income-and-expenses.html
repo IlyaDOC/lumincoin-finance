@@ -1,0 +1,127 @@
+<section class="content container" id="section income-and-expenses">
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content align-items-center" style="padding: 40px; box-sizing: border-box">
+                <div class="modal-body p-0" style="margin-bottom: 20px">
+                    <p class="text-nowrap m-0">Вы действительно хотите удалить операцию?</p>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-center p-0">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" style="margin-right: 12px">Да, удалить</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Не удалять</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1 class="content-header">Доходы и расходы</h1>
+    <div class="income-and-expenses-buttons">
+        <a class="income-and-expense-button btn btn-success my-btn" href="#/income-and-expenses/create">Создать доход</a>
+        <a class="income-and-expense-button btn btn-danger my-btn" href="#/income-and-expenses/create">Создать расход</a>
+    </div>
+    <div class="filter row">
+        <div class="button col">
+            <button type="button" class="filter-button filter-button-active col">Сегодня</button>
+        </div>
+        <div class="button col">
+            <button type="button" class="filter-button col">Неделя</button>
+        </div>
+        <div class="button col">
+            <button type="button" class="filter-button col">Месяц</button>
+        </div>
+        <div class="button col">
+            <button type="button" class="filter-button col">Год</button>
+        </div>
+        <div class="button col">
+            <button type="button" class="filter-button col">Все</button>
+        </div>
+        <div class="button col">
+            <button type="button" class="filter-button col">Интервал</button>
+        </div>
+        <div class="col d-flex justify-content-center align-items-center date">
+            <span>c </span>
+            <a href="javascript:void(0)" class="ps-2 text-secondary">Дата</a>
+        </div>
+        <div class="col d-flex justify-content-center align-items-center date">
+            <span>c </span>
+            <a href="javascript:void(0)" class="ps-2 text-secondary">Дата</a>
+        </div>
+    </div>
+    <div class="adaptive-filter">
+        <div class="nav-link adaptive-filter-button dropdown" data-bs-toggle="dropdown" aria-expanded="false">Выберите фильтр</div>
+        <ul class="dropdown-content dropdown-menu">
+            <li class="">
+                <button type="button" class="dropdown-item rounded-top">Сегодня</button>
+            </li>
+            <li>
+                <button type="button" class="dropdown-item">Неделя</button>
+            </li>
+            <li>
+                <button type="button" class="dropdown-item">Месяц</button>
+            </li>
+            <li>
+                <button type="button" class="dropdown-item">Год</button>
+            </li>
+            <li>
+                <button type="button" class="dropdown-item rounded-bottom">Все</button>
+            </li>
+        </ul>
+        <div class="dates row row-gap-4 mt-3">
+            <div class="d-flex justify-content-center align-items-center date col">
+                <span>c </span>
+                <a href="javascript:void(0)" class="ps-2 text-secondary">Дата</a>
+            </div>
+            <div class="d-flex justify-content-center align-items-center date col">
+                <span>c </span>
+                <a href="javascript:void(0)" class="ps-2 text-secondary">Дата</a>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive table-container">
+        <table class="table align-middle">
+            <thead>
+            <tr>
+                <th scope="col">№ операции</th>
+                <th scope="col">Тип</th>
+                <th scope="col">Категория</th>
+                <th scope="col" c>Сумма</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Комментарий</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>доход</td>
+                <td>зарплата</td>
+                <td>500$</td>
+                <td>11.09.2022</td>
+                <td></td>
+                <td class="action-cell">
+                    <div class="delete-action" title="Удалить">
+                        <i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>
+                    </div>
+                    <div class="edit-action" title="Редактировать">
+                        <i class="bi bi-pencil"></i>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>расход</td>
+                <td>жильё</td>
+                <td>2 500$</td>
+                <td>12.09.2022</td>
+                <td></td>
+                <td class="action-cell">
+                    <div class="delete-action" title="Удалить">
+                        <i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>
+                    </div>
+                    <div class="edit-action" title="Редактировать">
+                        <i class="bi bi-pencil"></i>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

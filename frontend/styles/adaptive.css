@@ -1,0 +1,139 @@
+@media screen and (max-width: 1376px) {
+    .chart {
+        width: 300px;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 1232px) {
+    .sidebar-fixed {
+        position: absolute;
+        z-index: 2;
+    }
+
+    .content-main {
+        text-align: center;
+        font-size: 30px;
+    }
+
+    .main-content {
+        flex-direction: column;
+    }
+
+    .chart {
+        width: 400px;
+        height: auto;
+    }
+
+    .filter {
+        display: none;
+    }
+
+    .adaptive-filter {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    .main-line {
+        display: none;
+    }
+
+    .diagram:nth-child(1) {
+        margin-bottom: 20px;
+    }
+
+    .content {
+        padding: 0 15px;
+    }
+
+    .content-header, .income-and-expenses-buttons {
+        text-align: center;
+    }
+
+}
+
+@media screen and (max-width: 850px) {
+    .chart {
+        width: 400px;
+        height: auto;
+    }
+
+
+    .content-header, .income-and-expenses-buttons {
+        text-align: center;
+    }
+
+    .content-header {
+        font-size: 30px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .table-container {
+        width: 400px;
+    }
+
+}
+
+@media screen and (max-width: 733px) {
+    .chart {
+        width: 300px;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 633px) {
+
+}
+
+
+@media screen and (max-width: 510px) {
+    .table-container {
+        width: 280px;
+    }
+
+    .income-and-expense-button {
+        text-align: center;
+    }
+
+    .income-and-expenses-buttons .btn-success {
+        margin-right: 0;
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 500px) {
+
+    .chart {
+        width: 250px;
+        height: auto;
+    }
+
+    .adaptive-filter-button {
+        width: 120px;
+        height: 50px;
+        font-size: 12px;
+
+    }
+}
+
+@media screen and (max-width: 390px) {
+    .category {
+        width: 270px;
+    }
+
+    .category-title.content-title {
+        font-size: 20px;
+    }
+
+    .my-btn {
+        font-size: 12px;
+    }
+
+}
+
+@media screen and (max-width: 350px) {
+    .chart {
+        width: 200px;
+    }
+}
