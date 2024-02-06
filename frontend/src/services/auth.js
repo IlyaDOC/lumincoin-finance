@@ -50,7 +50,8 @@ export class Auth {
         if (userInfo) {
             return JSON.parse(userInfo);
         }
-
         return null;
     }
+
+
 }
