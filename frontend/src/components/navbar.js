@@ -13,10 +13,10 @@ export class Navbar {
         this.userNameElement = document.getElementById('sidebar-user-name');
         this.balanceElement = document.getElementById('balance');
 
-
         this.dropdownElement.addEventListener('click', () => {
             this.dropdownElement.classList.toggle('dropdown-active');
         });
+
         this.activeStyle();
         this.toggleButton();
         this.navbarSizeChange();
@@ -27,6 +27,7 @@ export class Navbar {
         if (userInfo && accessToken) {
             this.userNameElement.innerHTML = `${userInfo.name} ${userInfo.lastName}`;
         }
+
         this.getBalance();
 
     }
@@ -55,7 +56,7 @@ export class Navbar {
     };
 
     navbarSizeChange() {
-        window.addEventListener('resize', ()=> {
+        window.addEventListener('resize', () => {
             if (window.innerWidth <= 1232) {
                 this.sidebarElement.classList.add('collapsed');
             }
@@ -64,8 +65,8 @@ export class Navbar {
 
     navbarClickClose() {
         if (window.innerWidth <= 1232) {
-            this.clickList.forEach(item=> {
-                item.addEventListener('click', ()=> {
+            this.clickList.forEach(item => {
+                item.addEventListener('click', () => {
                     this.sidebarElement.classList.add('collapsed');
                 })
             });
@@ -75,11 +76,12 @@ export class Navbar {
     async getBalance() {
         try {
             const result = await CustomHttp.request(config.host + '/balance');
-            if (result.error) {
-                throw new Error(result.error)
+            if (result) {
+                if (result.error) {
+                    throw new Error(result.error)
+                }
+                this.balanceElement.innerText = `${result.balance} $`;
             }
-            console.log(result);
-            this.balanceElement.innerText = `${result.balance} $`;
         } catch (error) {
             console.log(error)
         }

@@ -94,6 +94,11 @@
         margin-left: 12px;
     }
     & input {
-        margin-bottom: 1px;
+        margin-bottom: 2px;
     }
+}
+
+.invalid-feedback {
+    margin-left: 40px;
+    font-weight: 500;
 }

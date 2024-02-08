@@ -13,6 +13,7 @@ export class Form {
         this.confirmPassword = document.getElementById('confirm-password');
         this.processElement = document.getElementById('process');
 
+
         if (location.hash === '#/signup' || location.hash === '#/login') {
             this.sidebarElement.style.display = 'none';
         }
@@ -144,7 +145,7 @@ export class Form {
                     email: email,
                     password: password,
                     rememberMe: rememberValue
-                })
+                });
 
                 if (result) {
                     if (result.error || !result.tokens.accessToken || !result.tokens.refreshToken
@@ -160,7 +161,7 @@ export class Form {
                     location.href = '#/main';
                 }
             } catch (error) {
-                console.log(error);
+               return console.log(error);
             }
 
         }
