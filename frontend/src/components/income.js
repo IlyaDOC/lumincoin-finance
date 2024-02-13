@@ -13,10 +13,11 @@ export class Income {
         }
         if (location.hash === '#/income') {
             this.getCategories();
+            this.deleteCategory();
         }
-
-        this.editCategory();
-
+        if (location.hash !== '#/income' && location.hash !== '#/expenses') {
+            this.editCategory();
+        }
     }
 
     async getCategories() {
@@ -44,6 +45,7 @@ export class Income {
                     editButtonElement.innerText = 'Редактировать';
                     let deleteButtonElement = document.createElement('button');
                     deleteButtonElement.classList.add('delete', 'category-button', 'btn', 'btn-danger', 'my-btn');
+                    deleteButtonElement.setAttribute('data-id', result[i].id);
                     deleteButtonElement.innerText = 'Удалить';
                     deleteButtonElement.setAttribute('data-bs-toggle', 'modal');
                     deleteButtonElement.setAttribute('data-bs-target', '#deleteModal');
@@ -56,12 +58,8 @@ export class Income {
                     categoriesGridElement.insertAdjacentElement('afterbegin', colElement);
                 }
 
-                document.querySelectorAll('.income .categories .category-buttons .edit').forEach(buttonEdit => {
-                    let buttonEditId = buttonEdit.getAttribute('data-id');
-                    buttonEdit.addEventListener('click', () => {
-                        location.href = '#/income/edit?id=' + buttonEditId;
-                    });
-                });
+                this.editProcess();
+                this.deleteProcess();
 
             }
         } catch (error) {
@@ -69,30 +67,56 @@ export class Income {
         }
     };
 
+    editProcess(){
+        document.querySelectorAll('.income .categories .category-buttons .edit').forEach(buttonEdit => {
+            let buttonEditId = buttonEdit.getAttribute('data-id');
+            buttonEdit.addEventListener('click', () => {
+                location.href = '#/income/edit?id=' + buttonEditId;
+            });
+        });
+    }
+
     async editCategory() {
         let saveBtn = document.getElementById('save-btn');
         let incomeEditInput = document.getElementById('income-edit-input');
-        if (this.routeParams.id) {
-            try {
-                const result = await CustomHttp.request(config.host + '/categories/income/' + this.routeParams.id);
-                if (result) {
-                    if (result.error) {
-                        throw new Error(result.error);
-                    }
-                    incomeEditInput.value = result.title;
+        try {
+            const result = await CustomHttp.request(config.host + '/categories/income/' + this.routeParams.id);
+            if (result) {
+                if (result.error) {
+                    throw new Error(result.error);
                 }
-
-                if (incomeEditInput.value) {
-                    saveBtn.addEventListener('click',()=> {
-                       CustomHttp.request(config.host + '/categories/income/' + this.routeParams.id, 'PUT', {
-                           title: incomeEditInput.value
-                       })
-                        location.hash = '#/income';
-                    });
-                }
-            } catch (error) {
-
+                incomeEditInput.value = result.title;
             }
+
+            if (incomeEditInput.value) {
+                saveBtn.addEventListener('click', () => {
+                    CustomHttp.request(config.host + '/categories/income/' + this.routeParams.id, 'PUT', {
+                        title: incomeEditInput.value
+                    })
+                    location.hash = '#/income';
+                });
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
+
+    deleteProcess() {
+        document.querySelectorAll('.income .categories .category-buttons .delete').forEach(buttonDelete => {
+            let buttonDeleteId = buttonDelete.getAttribute('data-id');
+            buttonDelete.addEventListener('click', () => {
+                sessionStorage.setItem('deleteId', buttonDeleteId);
+            });
+        });
+    }
+
+    async deleteCategory() {
+        document.getElementById('delete-button-modal').addEventListener('click',async () => {
+            await CustomHttp.request(config.host + '/categories/income/' + sessionStorage.getItem('deleteId'), 'DELETE');
+            document.querySelectorAll('.categories-grid .col:not(:last-child)').forEach(element=> {
+                element.remove();
+            })
+            await this.getCategories();
+        })
+    }
 }
