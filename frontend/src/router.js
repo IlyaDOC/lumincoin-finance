@@ -127,6 +127,12 @@ export class Router {
     async openRoute() {
         const urlRoute = window.location.hash.split('?')[0];
 
+        if (urlRoute === '#/logout') {
+            await Auth.logout();
+            window.location.href = '#/signup';
+            return;
+        }
+
         const newRoute = this.routes.find(item => {
             return item.route === urlRoute;
         });

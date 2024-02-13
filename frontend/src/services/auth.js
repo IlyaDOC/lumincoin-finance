@@ -31,6 +31,29 @@ export class Auth {
         return false;
     };
 
+    static async logout() {
+        const refreshToken = localStorage.getItem(this.refreshTokenKey);
+        if (refreshToken) {
+            const response = await fetch(config.host + '/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({refreshToken: refreshToken})
+            });
+
+            if (response && response.status === 200) {
+                const result = await response.json();
+                if (result && !result.error) {
+                    Auth.removeTokens();
+                    localStorage.removeItem(Auth.userInfoKey);
+                    return true;
+                }
+            }
+        }
+    };
+
     static setTokens(accessToken, refreshToken) {
         localStorage.setItem(this.accessTokenKey, accessToken);
         localStorage.setItem(this.refreshTokenKey, refreshToken);
