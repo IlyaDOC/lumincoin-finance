@@ -10,9 +10,7 @@ export class Navbar {
         this.sidebarToggleButtonIcon = document.querySelector('#sidebarToggle i');
         this.listItems = document.querySelectorAll('#sidebar > .main-part > ul > li a');
         this.clickList = document.querySelectorAll('.click-btn');
-        this.userNameElement = document.getElementById('sidebar-user-name');
         this.balanceElement = document.getElementById('balance');
-
         this.dropdownElement.addEventListener('click', () => {
             this.dropdownElement.classList.toggle('dropdown-active');
         });
@@ -22,11 +20,6 @@ export class Navbar {
         this.navbarSizeChange();
         this.navbarClickClose();
 
-        const userInfo = Auth.getUserInfo();
-        const accessToken = localStorage.getItem(Auth.accessTokenKey);
-        if (userInfo && accessToken) {
-            this.userNameElement.innerHTML = `${userInfo.name} ${userInfo.lastName}`;
-        }
 
         this.getBalance();
 

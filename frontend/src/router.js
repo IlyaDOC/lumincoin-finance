@@ -9,7 +9,7 @@ export class Router {
         this.contentElement = document.getElementById('content');
         this.titleElement = document.getElementById('page-title');
         this.stylesElement = document.getElementById('styles');
-
+        this.userNameElement = document.getElementById('sidebar-user-name');
 
 
         this.routes = [
@@ -140,6 +140,11 @@ export class Router {
             await fetch(newRoute.template).then(response => response.text());
         this.titleElement.innerText = newRoute.title;
 
+        const userInfo = Auth.getUserInfo();
+        const accessToken = localStorage.getItem(Auth.accessTokenKey);
+        if (userInfo && accessToken) {
+            this.userNameElement.innerHTML = `${userInfo.name} ${userInfo.lastName}`;
+        }
 
 
         newRoute.load();
