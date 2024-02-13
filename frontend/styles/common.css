@@ -113,6 +113,10 @@ body {
     margin-right: 10px;
 }
 
+.btn-primary {
+    margin-right: 10px;
+}
+
 .category {
     padding: 20px;
     border-radius: 12px;
@@ -144,7 +148,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    max-width: 352px;
+    width: 352px;
 }
 
 .filter {
