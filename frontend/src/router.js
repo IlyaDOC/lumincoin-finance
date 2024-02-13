@@ -1,16 +1,16 @@
 import {Form} from "./components/form.js";
 import {Main} from "./components/main.js";
-import {Navbar} from "./components/navbar.js";
 import {Income} from "./components/income.js";
 import {Expenses} from "./components/expenses.js";
 import {IncomeAndExpenses} from "./components/income-and-expenses.js";
+import {Auth} from "./services/auth.js";
 export class Router {
     constructor() {
         this.contentElement = document.getElementById('content');
         this.titleElement = document.getElementById('page-title');
-        this.profileElement = document.getElementById('profile');
-        this.profileFullNameElement = document.getElementById('sidebar-user-name');
         this.stylesElement = document.getElementById('styles');
+
+
 
         this.routes = [
             {
@@ -130,15 +130,19 @@ export class Router {
         const newRoute = this.routes.find(item => {
             return item.route === urlRoute;
         });
+
         if (!newRoute) {
            return window.location.href = '#/signup';
         }
+
         this.stylesElement.setAttribute('href', newRoute.styles);
         this.contentElement.innerHTML =
             await fetch(newRoute.template).then(response => response.text());
         this.titleElement.innerText = newRoute.title;
-        newRoute.load();
 
+
+
+        newRoute.load();
 
     }
 }

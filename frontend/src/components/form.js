@@ -1,3 +1,7 @@
+import config from "../../config/config.js";
+import {CustomHttp} from "../services/custom-http.js";
+import {Auth} from "../services/auth.js";
+
 export class Form {
     constructor(page) {
         this.page = page;
@@ -8,6 +12,7 @@ export class Form {
         this.password = document.getElementById('password');
         this.confirmPassword = document.getElementById('confirm-password');
         this.processElement = document.getElementById('process');
+
 
         if (location.hash === '#/signup' || location.hash === '#/login') {
             this.sidebarElement.style.display = 'none';
@@ -44,13 +49,16 @@ export class Form {
             );
         }
 
-        const that = this;
 
+        const that = this;
         this.fields.forEach(item => {
             item.element = document.getElementById(item.id);
             item.element.addEventListener('input', function () {
                 that.validateField.call(that, item, this);
             });
+        });
+        this.processElement.addEventListener('click', () => {
+            this.processForm();
         });
 
     }
@@ -69,7 +77,7 @@ export class Form {
 
     validateForm() {
         const validForm = this.fields.every(item => item.valid);
-        const isValid = validForm && this.confirmFlag;
+        const isValid = this.confirmPassword ? validForm && this.confirmFlag : validForm;
         if (isValid) {
             this.processElement.classList.remove('disabled');
         } else {
@@ -93,5 +101,69 @@ export class Form {
             }
             this.validateForm();
         });
+    };
+
+    async processForm() {
+        if (this.validateForm()) {
+
+            const email = this.fields.find(item => item.name === 'email').element.value;
+            const password = this.fields.find(item => item.name === 'password').element.value;
+
+
+            if (this.page === 'signup') {
+                const fullNameValue = this.fields.find(item => item.name === 'fullName').element.value;
+                const fullNameArray = fullNameValue.split(' ');
+                const name = fullNameArray[1];
+                const lastName = fullNameArray[0];
+                const passwordRepeat = this.confirmPassword.value;
+                try {
+                    const result = await CustomHttp.request(config.host + '/signup', 'POST', {
+                        name: name,
+                        lastName: lastName,
+                        email: email,
+                        password: password,
+                        passwordRepeat: passwordRepeat
+                    })
+
+                    if (result) {
+                        if (result.error || !result.user) {
+                            throw new Error(result.message);
+                        }
+                    }
+                } catch (error) {
+                    return console.log(error);
+                }
+
+            }
+            try {
+                let rememberValue = false;
+                if (this.page === 'login') {
+                    rememberValue = document.getElementById('remember-me').checked;
+                }
+
+                const result = await CustomHttp.request(config.host + '/login', 'POST', {
+                    email: email,
+                    password: password,
+                    rememberMe: rememberValue
+                });
+
+                if (result) {
+                    if (result.error || !result.tokens.accessToken || !result.tokens.refreshToken
+                        || !result.user.name || !result.user.lastName || !result.user.id) {
+                        throw new Error(result.message);
+                    }
+                    Auth.setTokens(result.tokens.accessToken, result.tokens.refreshToken);
+                    Auth.setUserInfo({
+                        name: result.user.name,
+                        lastName: result.user.lastName,
+                        userId: result.user.id
+                    })
+                    location.href = '#/main';
+                }
+            } catch (error) {
+               return console.log(error);
+            }
+
+        }
     };
 }

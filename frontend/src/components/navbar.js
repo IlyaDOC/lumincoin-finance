@@ -1,22 +1,34 @@
+import {Auth} from "../services/auth.js";
+import {CustomHttp} from "../services/custom-http.js";
+import config from "../../config/config.js";
+
 export class Navbar {
     constructor() {
         this.dropdownElement = document.getElementById('dropdown');
-        this.dropDownButton = document.getElementById('dropdownBtn');
         this.sidebarElement = document.getElementById('sidebar');
-        this.sectionElement = document.getElementById('section');
         this.sidebarToggleButton = document.getElementById('sidebarToggle');
         this.sidebarToggleButtonIcon = document.querySelector('#sidebarToggle i');
         this.listItems = document.querySelectorAll('#sidebar > .main-part > ul > li a');
         this.clickList = document.querySelectorAll('.click-btn');
+        this.userNameElement = document.getElementById('sidebar-user-name');
+        this.balanceElement = document.getElementById('balance');
 
         this.dropdownElement.addEventListener('click', () => {
             this.dropdownElement.classList.toggle('dropdown-active');
         });
+
         this.activeStyle();
         this.toggleButton();
         this.navbarSizeChange();
         this.navbarClickClose();
 
+        const userInfo = Auth.getUserInfo();
+        const accessToken = localStorage.getItem(Auth.accessTokenKey);
+        if (userInfo && accessToken) {
+            this.userNameElement.innerHTML = `${userInfo.name} ${userInfo.lastName}`;
+        }
+
+        this.getBalance();
 
     }
 
@@ -44,7 +56,7 @@ export class Navbar {
     };
 
     navbarSizeChange() {
-        window.addEventListener('resize', ()=> {
+        window.addEventListener('resize', () => {
             if (window.innerWidth <= 1232) {
                 this.sidebarElement.classList.add('collapsed');
             }
@@ -53,11 +65,25 @@ export class Navbar {
 
     navbarClickClose() {
         if (window.innerWidth <= 1232) {
-            this.clickList.forEach(item=> {
-                item.addEventListener('click', ()=> {
+            this.clickList.forEach(item => {
+                item.addEventListener('click', () => {
                     this.sidebarElement.classList.add('collapsed');
                 })
             });
+        }
+    }
+
+    async getBalance() {
+        try {
+            const result = await CustomHttp.request(config.host + '/balance');
+            if (result) {
+                if (result.error) {
+                    throw new Error(result.error)
+                }
+                this.balanceElement.innerText = `${result.balance} $`;
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 }

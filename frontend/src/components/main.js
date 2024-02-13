@@ -1,4 +1,4 @@
-import {Diagrams} from "../services/diagrams.js";
+import {Diagrams} from "./diagrams.js";
 
 
 export class Main {
@@ -7,7 +7,7 @@ export class Main {
         this.sidebarElement.style.display = 'block';
         this.mainListItem = document.getElementById('main');
         this.activeStyleOnLoad();
-        this.diagrams = new Diagrams();
+        new Diagrams();
     }
 
     activeStyleOnLoad() {
