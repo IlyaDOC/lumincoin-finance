@@ -1,8 +1,12 @@
 <section class="content container" id="section">
     <h1 class="content-header">Создание категории доходов</h1>
-    <input type="text" class="form-control my-input-one" placeholder="Название...">
+    <div class="form-group">
+        <input type="text" class="form-control my-input-one" id="income-create-input"
+                                   placeholder="Название..." required>
+        <div class="invalid-feedback">Поле не должно быть пустым</div>
+    </div>
     <div class="create-buttons">
-        <div class="create-button create btn btn-success my-btn">Создать</div>
-        <div class="create-button cancel btn btn-danger my-btn">Отмена</div>
+        <div class="create-button create btn btn-success my-btn" id="income-create-button">Создать</div>
+        <div class="create-button cancel btn btn-danger my-btn" id="income-create-cancel-button">Отмена</div>
     </div>
 </section>

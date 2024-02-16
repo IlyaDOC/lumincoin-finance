@@ -6,6 +6,7 @@ export class Income {
     constructor() {
         this.routeParams = UrlManager.getQueryParams();
         this.addButton = document.getElementById('add');
+        this.incomeCreateInputValue = null;
         if (this.addButton) {
             this.addButton.addEventListener('click', () => {
                 location.href = '#/income/create';
@@ -15,8 +16,12 @@ export class Income {
             this.getCategories();
             this.deleteCategory();
         }
-        if (location.hash !== '#/income' && location.hash !== '#/expenses') {
+        if (location.hash !== '#/income' && location.hash !== '#/expenses' && location.hash !== '#/income/create') {
             this.editCategory();
+        }
+
+        if (location.hash === '#/income/create') {
+            this.addCategory();
         }
     }
 
@@ -67,7 +72,7 @@ export class Income {
         }
     };
 
-    editProcess(){
+    editProcess() {
         document.querySelectorAll('.income .categories .category-buttons .edit').forEach(buttonEdit => {
             let buttonEditId = buttonEdit.getAttribute('data-id');
             buttonEdit.addEventListener('click', () => {
@@ -111,12 +116,50 @@ export class Income {
     }
 
     async deleteCategory() {
-        document.getElementById('delete-button-modal').addEventListener('click',async () => {
+        document.getElementById('delete-button-modal').addEventListener('click', async () => {
             await CustomHttp.request(config.host + '/categories/income/' + sessionStorage.getItem('deleteId'), 'DELETE');
-            document.querySelectorAll('.categories-grid .col:not(:last-child)').forEach(element=> {
+            document.querySelectorAll('.categories-grid .col:not(:last-child)').forEach(element => {
                 element.remove();
             })
             await this.getCategories();
         })
+    }
+
+    async addCategory() {
+        const incomeCreateButton = document.getElementById('income-create-button');
+        const incomeCreateInput = document.getElementById('income-create-input');
+        incomeCreateInput.addEventListener('input', (event) => {
+            this.incomeCreateInputValue = event.target.value;
+            if (!this.incomeCreateInputValue) {
+                incomeCreateInput.classList.add('is-invalid');
+            } else {
+                if (incomeCreateInput.classList.contains('is-invalid')) {
+                    incomeCreateInput.classList.remove('is-invalid')
+                }
+                incomeCreateInput.classList.add('is-valid');
+            }
+        });
+        incomeCreateButton.addEventListener('click', async () => {
+            try {
+                if (!this.incomeCreateInputValue) {
+                    incomeCreateInput.classList.add('is-invalid');
+                    throw new Error('Поле не должно быть пустым')
+                } else {
+
+                    await CustomHttp.request(config.host + '/categories/income', 'POST', {
+                        title: this.incomeCreateInputValue
+                    });
+                    location.href = '#/income'
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
+        });
+
+        document.getElementById('income-create-cancel-button').addEventListener('click', () => {
+            location.href = '#/income';
+        });
+
     }
 }
