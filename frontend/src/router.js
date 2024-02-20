@@ -152,8 +152,6 @@ export class Router {
             this.userNameElement.innerHTML = `${userInfo.name} ${userInfo.lastName}`;
         }
 
-
         newRoute.load();
-
     }
 }
