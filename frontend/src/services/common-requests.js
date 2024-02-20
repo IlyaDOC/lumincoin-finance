@@ -15,7 +15,7 @@ export class CommonRequests {
             const result = await CustomHttp.request(config.host + '/categories/' + this.path);
             if (result) {
                 if (result.error) {
-                    throw new Error(result.error)
+                    throw new Error(result.error);
                 }
                 let categoriesGridElement = document.querySelector('.categories-grid');
 

@@ -22,3 +22,8 @@
 .edit-action {
     margin-left: 10px;
 }
+
+.date label {
+    margin-right: 10px;
+    font-weight: 500;
+}

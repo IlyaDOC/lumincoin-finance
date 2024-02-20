@@ -19,30 +19,32 @@
     </div>
     <div class="filter row">
         <div class="button col">
-            <button type="button" class="filter-button filter-button-active col">Сегодня</button>
+            <button type="button" class="filter-button filter-button-active col" data-filter="today">Сегодня</button>
         </div>
         <div class="button col">
-            <button type="button" class="filter-button col">Неделя</button>
+            <button type="button" class="filter-button col" data-filter="week">Неделя</button>
         </div>
         <div class="button col">
-            <button type="button" class="filter-button col">Месяц</button>
+            <button type="button" class="filter-button col" data-filter="month">Месяц</button>
         </div>
         <div class="button col">
-            <button type="button" class="filter-button col">Год</button>
+            <button type="button" class="filter-button col" data-filter="year">Год</button>
         </div>
         <div class="button col">
-            <button type="button" class="filter-button col">Все</button>
+            <button type="button" class="filter-button col" data-filter="all">Все</button>
         </div>
         <div class="button col">
-            <button type="button" class="filter-button col">Интервал</button>
+            <button type="button" class="filter-button col" data-filter="interval">Интервал</button>
         </div>
         <div class="col d-flex justify-content-center align-items-center date">
-            <span>c </span>
-            <a href="javascript:void(0)" class="ps-2 text-secondary">Дата</a>
+            <span></span>
+            <label for="startDate">с</label>
+            <input id="startDate" class="form-control" type="date" />
         </div>
         <div class="col d-flex justify-content-center align-items-center date">
-            <span>c </span>
-            <a href="javascript:void(0)" class="ps-2 text-secondary">Дата</a>
+            <span></span>
+            <label for="endDate">по</label>
+            <input id="endDate" class="form-control" type="date" />
         </div>
     </div>
     <div class="adaptive-filter">
@@ -70,7 +72,7 @@
                 <a href="javascript:void(0)" class="ps-2 text-secondary">Дата</a>
             </div>
             <div class="d-flex justify-content-center align-items-center date col">
-                <span>c </span>
+                <span>по </span>
                 <a href="javascript:void(0)" class="ps-2 text-secondary">Дата</a>
             </div>
         </div>
@@ -88,39 +90,39 @@
                 <th scope="col"></th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>доход</td>
-                <td>зарплата</td>
-                <td>500$</td>
-                <td>11.09.2022</td>
-                <td></td>
-                <td class="action-cell">
-                    <div class="delete-action" title="Удалить">
-                        <i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>
-                    </div>
-                    <div class="edit-action" title="Редактировать">
-                        <i class="bi bi-pencil"></i>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>расход</td>
-                <td>жильё</td>
-                <td>2 500$</td>
-                <td>12.09.2022</td>
-                <td></td>
-                <td class="action-cell">
-                    <div class="delete-action" title="Удалить">
-                        <i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>
-                    </div>
-                    <div class="edit-action" title="Редактировать">
-                        <i class="bi bi-pencil"></i>
-                    </div>
-                </td>
-            </tr>
+            <tbody id="tbody">
+<!--            <tr>-->
+<!--                <th scope="row">1</th>-->
+<!--                <td>доход</td>-->
+<!--                <td>зарплата</td>-->
+<!--                <td>500$</td>-->
+<!--                <td>11.09.2022</td>-->
+<!--                <td class="comment"></td>-->
+<!--                <td class="action-cell">-->
+<!--                    <div class="delete-action" title="Удалить">-->
+<!--                        <i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>-->
+<!--                    </div>-->
+<!--                    <div class="edit-action" title="Редактировать">-->
+<!--                        <i class="bi bi-pencil"></i>-->
+<!--                    </div>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <th scope="row">2</th>-->
+<!--                <td>расход</td>-->
+<!--                <td>жильё</td>-->
+<!--                <td>2 500$</td>-->
+<!--                <td>12.09.2022</td>-->
+<!--                <td></td>-->
+<!--                <td class="action-cell">-->
+<!--                    <div class="delete-action" title="Удалить">-->
+<!--                        <i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>-->
+<!--                    </div>-->
+<!--                    <div class="edit-action" title="Редактировать">-->
+<!--                        <i class="bi bi-pencil"></i>-->
+<!--                    </div>-->
+<!--                </td>-->
+<!--            </tr>-->
             </tbody>
         </table>
     </div>
