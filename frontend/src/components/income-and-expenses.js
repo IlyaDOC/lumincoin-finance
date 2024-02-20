@@ -1,11 +1,13 @@
 import {CustomHttp} from "../services/custom-http.js";
 import config from "../../config/config.js";
+import {UrlManager} from "../utils/url-manager.js";
 
 export class IncomeAndExpenses {
     constructor() {
         this.typeOfElement = document.getElementById('typeOf');
         this.category = document.getElementById('category');
         this.editActions = null;
+        this.confirmButton = document.getElementById('confirm-button');
         this.init();
         this.getOperationsWithFilter();
 
@@ -20,7 +22,12 @@ export class IncomeAndExpenses {
         if (location.hash === '#/income-and-expenses') {
             await this.getOperationsDefault();
         }
+
+        if (location.hash !== '#/income-and-expenses' && location.hash !== '#/income-and-expenses/create') {
+            await this.editOperation();
+        }
     }
+
     /** Меняет цвет в зависимости от типа */
     colorManager(text) {
         if (text.innerText === 'доход') {
@@ -29,12 +36,13 @@ export class IncomeAndExpenses {
             text.style.color = '#DC3545';
         }
     };
+
     /** Добавляет функцию перехода на страницу редактирования
      * для кнопки редактировать (карандаш)*/
     editActionManager(editActions) {
         editActions.forEach(action => {
-            action.addEventListener('click', () => {
-                location.href = '#/income-and-expenses/edit';
+            action.addEventListener('click', function (event) {
+                location.href = '#/income-and-expenses/edit?id=' + this.getAttribute('data-id');
             });
         });
     };
@@ -47,6 +55,7 @@ export class IncomeAndExpenses {
         const day = String(today.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
+
     /** Запрос по умолчанию, при загрузке страницы категорий
      * доходов и расходов.
      * По умолчанию это операции за сегодняшний день*/
@@ -75,27 +84,38 @@ export class IncomeAndExpenses {
                 let typeOfElement = document.createElement('td');
                 typeOfElement.innerText = item.type === 'income' ? 'доход' : 'расход';
                 this.colorManager(typeOfElement);
+
                 let titleOfElement = document.createElement('td');
                 titleOfElement.innerText = item.category ? item.category : 'без категории';
+
                 let amountElement = document.createElement('td');
                 amountElement.innerText = `${item.amount}$`
+
                 let dateElement = document.createElement('td');
                 dateElement.innerText = this.formattedDateFromRequest(item.date);
+
                 let commentElement = document.createElement('td');
                 commentElement.classList.add('comment');
                 commentElement.innerText = item.comment;
+
                 let actionCellElement = document.createElement('td');
                 actionCellElement.classList.add('action-cell');
+
                 let deleteActionCellElement = document.createElement('div');
                 deleteActionCellElement.classList.add('delete-action');
                 deleteActionCellElement.setAttribute('title', 'Удалить');
+                deleteActionCellElement.setAttribute('data-id', item.id)
+
                 let deleteActionIconElement = document.createElement('i');
                 deleteActionIconElement.classList.add('bi', 'bi-trash');
                 deleteActionIconElement.setAttribute('data-bs-toggle', 'modal');
                 deleteActionIconElement.setAttribute('data-bs-target', '#deleteModal');
+
                 let editActionCellElement = document.createElement('div');
                 editActionCellElement.classList.add('edit-action');
                 editActionCellElement.setAttribute('title', 'Редактировать');
+                editActionCellElement.setAttribute('data-id', item.id)
+
                 let editActionIconElement = document.createElement('i');
                 editActionIconElement.classList.add('bi', 'bi-pencil');
 
@@ -119,12 +139,14 @@ export class IncomeAndExpenses {
     };
 
     /** Функция добавляет возможность работы с фильтрами.
-      */
+     */
     getOperationsWithFilter() {
         try {
             const filerButtons = document.querySelectorAll('.filter .filter-button');
+
             filerButtons.forEach(filterButton => {
                 filterButton.addEventListener('click', async () => {
+
                     filerButtons.forEach(filterButton => {
                         filterButton.classList.remove('filter-button-active');
                     });
@@ -135,6 +157,7 @@ export class IncomeAndExpenses {
                         const result = await CustomHttp.request(config.host + '/operations?period=interval&dateFrom='
                             + this.getTodayDate() + '&dateTo=' + this.getTodayDate());
                         this.renderResult(result);
+
                     } else if (filterButton.hasAttribute('data-filter')
                         && filterButton.getAttribute('data-filter') === 'interval') {
                         const startDateElement = document.getElementById('startDate');
@@ -145,6 +168,7 @@ export class IncomeAndExpenses {
                                 + startDateElement.value + '&dateTo=' + endDateElement.value);
                             this.renderResult(result);
                         })
+
                     } else {
                         const result = await CustomHttp.request(config.host + '/operations?period=' +
                             filterButton.getAttribute('data-filter'));
@@ -163,6 +187,24 @@ export class IncomeAndExpenses {
         return `${dateArray[2]}.${dateArray[1]}.${dateArray[0]}`;
     }
 
+
+    /** Добавляет в Select элементы в зависимости от типа запроса.
+     * При наличии второго параметра, сравнивает название option элемента с
+     * этим параметром и добавляет ему атрибут Selected. Это требуется в функции
+     * редактирования, чтобы сразу выбиралась категория операции*/
+    renderOptions(result, category = null) {
+        result.forEach(item => {
+            let optionElement = document.createElement('option');
+            optionElement.setAttribute('name', 'category');
+            optionElement.setAttribute('value', item.id);
+            optionElement.innerText = item.title;
+            if (item.title === category) {
+                optionElement.setAttribute('selected', 'true');
+            }
+            this.category.appendChild(optionElement);
+        });
+    }
+
     /** Функция добавляет список категорий в select Тип... в зависимости
      * от выбранной категории */
     requestCategories() {
@@ -172,16 +214,10 @@ export class IncomeAndExpenses {
                     element.remove();
                 });
                 const typeOfValue = this.typeOfElement.value;
+
                 if (typeOfValue) {
                     const result = await CustomHttp.request(config.host + '/categories/' + typeOfValue);
-
-                    result.forEach(item => {
-                        let optionElement = document.createElement('option');
-                        optionElement.setAttribute('name', 'category');
-                        optionElement.setAttribute('value', item.id);
-                        optionElement.innerText = item.title;
-                        this.category.appendChild(optionElement);
-                    });
+                    this.renderOptions(result);
 
                     if (result) {
                         if (result.error) {
@@ -194,13 +230,15 @@ export class IncomeAndExpenses {
             console.log(error)
         }
     };
+
     /** Функция делает запрос на создание нового вида операции */
     createOperation() {
-        const confirmButton = document.getElementById('confirm-button');
+
         try {
             const formElement = document.querySelector('.form');
             formElement.classList.add('was-validated');
-            confirmButton.addEventListener('click', async (event) => {
+
+            this.confirmButton.addEventListener('click', async (event) => {
                 const categoryElement = document.getElementById('category');
                 const typeOfValue = this.typeOfElement.value;
                 const categoryId = categoryElement.value;
@@ -224,6 +262,7 @@ export class IncomeAndExpenses {
         }
 
     }
+
     /** Не позволяет в поле ввода суммы вводить что-то, кроме цифр */
     amountChecker() {
         const amountInput = document.getElementById('amount');
@@ -234,7 +273,55 @@ export class IncomeAndExpenses {
         });
     };
 
-    editOperation(){
-        
+
+    /** Функция редактирования операции.
+     * Из query параметров получает id операции, затем делает запрос на бэк для
+     * получения значения полей и заполняет их.
+     * Повторно запрашивает значения для Select. При изменении значения, повторно запрашивает новый список.
+     * Далее при подтверждении отправляется запрос PUT на изменение операции*/
+    async editOperation() {
+        const routeParams = UrlManager.getQueryParams();
+
+        try {
+            if (routeParams) {
+                const typeOfElement = document.getElementById('typeOf');
+                const amountElement = document.getElementById('amount');
+                const dateElement = document.getElementById('date');
+                const commentElement = document.getElementById('comment');
+                const category = document.getElementById('category');
+
+                const result = await CustomHttp.request(config.host + '/operations/' + routeParams.id);
+
+
+                typeOfElement.value = result.type;
+                amountElement.value = result.amount;
+                dateElement.value = result.date;
+                commentElement.value = result.comment;
+
+                const typeOfValue = typeOfElement.value;
+
+                const getCategories = await CustomHttp.request(config.host + '/categories/' + typeOfValue);
+
+                this.renderOptions(getCategories, result.category);
+                await this.requestCategories();
+
+                this.confirmButton.addEventListener('click',async ()=> {
+                    const categoryId = category.value;
+                    await CustomHttp.request(config.host + '/operations/' + routeParams.id, 'PUT', {
+                        type: typeOfElement.value,
+                        amount: amountElement.value,
+                        date: dateElement.value,
+                        comment: commentElement.value,
+                        category_id: +categoryId
+                    })
+
+                    location.href = '#/income-and-expenses';
+                });
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
     };
 }

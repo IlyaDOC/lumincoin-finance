@@ -3,18 +3,18 @@
     <form action="#" class="needs-validation form">
         <div>
             <select name="typeOf" id="typeOf" class="my-input-group select form-control" required>
-                <option selected hidden="" value="">Тип...</option>
+                <option selected hidden value="">Тип...</option>
                 <option name="typeOf" value="income">Доход</option>
                 <option name="typeOf" value="expense">Расход</option>
             </select>
         </div>
         <div>
             <select name="category" id="category" class="my-input-group select form-control" required>
-                <option selected hidden="" value="">Категория...</option>
+                <option selected hidden value="">Категория...</option>
             </select>
         </div>
         <div>
-            <input type="text" class="form-control my-input-group" pattern="[0-9]*" placeholder="Сумма в $..." id="amount" required>
+            <input type="text" class="form-control my-input-group" placeholder="Сумма в $..." id="amount" required>
         </div>
         <div>
             <input type="date" class="form-control my-input-group" placeholder="Дата..." id="date" required>

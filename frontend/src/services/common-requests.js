@@ -21,24 +21,31 @@ export class CommonRequests {
 
                 for (let i = result.length - 1; i >= 0; i--) {
                     let colElement = document.createElement('div');
+
                     colElement.classList.add('col');
                     colElement.setAttribute('id', result[i].id);
+
                     let categoryElement = document.createElement('div');
                     categoryElement.classList.add('category');
+
                     let categoryTitleElement = document.createElement('div');
                     categoryTitleElement.classList.add('category-title', 'content-title');
+
                     let categoryButtonsElement = document.createElement('div');
                     categoryButtonsElement.classList.add('category-buttons');
+
                     let editButtonElement = document.createElement('a');
                     editButtonElement.classList.add('edit', 'category-button', 'btn', 'btn-primary', 'my-btn');
                     editButtonElement.setAttribute('data-id', result[i].id);
                     editButtonElement.innerText = 'Редактировать';
+
                     let deleteButtonElement = document.createElement('button');
                     deleteButtonElement.classList.add('delete', 'category-button', 'btn', 'btn-danger', 'my-btn');
                     deleteButtonElement.setAttribute('data-id', result[i].id);
                     deleteButtonElement.innerText = 'Удалить';
                     deleteButtonElement.setAttribute('data-bs-toggle', 'modal');
                     deleteButtonElement.setAttribute('data-bs-target', '#deleteModal');
+
                     categoryButtonsElement.appendChild(editButtonElement);
                     categoryButtonsElement.appendChild(deleteButtonElement);
                     categoryTitleElement.innerText = result[i].title;
