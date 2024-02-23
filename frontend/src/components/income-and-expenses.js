@@ -1,6 +1,7 @@
 import {CustomHttp} from "../services/custom-http.js";
 import config from "../../config/config.js";
 import {UrlManager} from "../utils/url-manager.js";
+import {Navbar} from "./navbar.js";
 
 export class IncomeAndExpenses {
     constructor() {
@@ -10,6 +11,7 @@ export class IncomeAndExpenses {
         this.confirmButton = document.getElementById('confirm-button');
         this.init();
         this.getOperationsWithFilter();
+        this.navbar = new Navbar();
 
         if (location.hash === '#/income-and-expenses/create') {
             this.amountChecker();
@@ -21,6 +23,7 @@ export class IncomeAndExpenses {
     async init() {
         if (location.hash === '#/income-and-expenses') {
             await this.getOperationsDefault();
+            await this.deleteOperation();
         }
 
         if (location.hash !== '#/income-and-expenses' && location.hash !== '#/income-and-expenses/create') {
@@ -134,6 +137,7 @@ export class IncomeAndExpenses {
                 itemRowElement.appendChild(commentElement);
                 itemRowElement.appendChild(actionCellElement);
                 tbodyElement.appendChild(itemRowElement);
+                this.deleteProcess();
             });
         }
     };
@@ -254,6 +258,7 @@ export class IncomeAndExpenses {
                         comment: commentValue,
                         category_id: +categoryId
                     })
+                    await this.navbar.getBalance()
                     location.href = '#/income-and-expenses';
                 }
             });
@@ -314,14 +319,33 @@ export class IncomeAndExpenses {
                         comment: commentElement.value,
                         category_id: +categoryId
                     })
-
+                    await this.navbar.getBalance()
                     location.href = '#/income-and-expenses';
                 });
             }
 
 
+
         } catch (error) {
             console.log(error)
         }
+    };
+    deleteProcess() {
+        document.querySelectorAll('.delete-action').forEach(buttonDelete=> {
+            let buttonDeleteId = buttonDelete.getAttribute('data-id');
+            buttonDelete.addEventListener('click', ()=> {
+                sessionStorage.setItem('deleteId', buttonDeleteId);
+            });
+        });
+    };
+    deleteOperation() {
+        document.getElementById('delete-button-modal').addEventListener('click', async () => {
+            await CustomHttp.request(config.host + '/operations/' + sessionStorage.getItem('deleteId'), 'DELETE');
+            document.querySelectorAll('#tbody tr').forEach(element => {
+                element.remove();
+            })
+            await this.navbar.getBalance()
+            await this.getOperationsDefault()
+        })
     };
 }

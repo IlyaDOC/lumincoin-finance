@@ -80,6 +80,7 @@ export class Navbar {
                 if (result.error) {
                     throw new Error(result.error)
                 }
+                this.balanceElement.innerText = '';
                 this.balanceElement.innerText = `${result.balance} $`;
             }
         } catch (error) {
