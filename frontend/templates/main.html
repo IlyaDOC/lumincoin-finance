@@ -1,63 +1,63 @@
 <section class="main content content-navbar container" id="section main">
-    <h1 class="content-main">Главная</h1>
-    <div class="filter row">
+    <h1 class="content-header">Главная</h1>
+    <div class="filter row filter-common">
         <div class="button col">
             <button type="button" class="filter-button filter-button-active col" data-filter="today">Сегодня</button>
         </div>
         <div class="button col">
-            <button type="button" class="filter-button col" data-filter="week">Неделя</button>
+            <button type="button" class="filter-button col filter-button-common" data-filter="week">Неделя</button>
         </div>
         <div class="button col">
-            <button type="button" class="filter-button col" data-filter="month">Месяц</button>
+            <button type="button" class="filter-button col filter-button-common" data-filter="month">Месяц</button>
         </div>
         <div class="button col">
-            <button type="button" class="filter-button col" data-filter="year">Год</button>
+            <button type="button" class="filter-button col filter-button-common" data-filter="year">Год</button>
         </div>
         <div class="button col">
-            <button type="button" class="filter-button col" data-filter="all">Все</button>
+            <button type="button" class="filter-button col filter-button-common" data-filter="all">Все</button>
         </div>
         <div class="button col">
-            <button type="button" class="filter-button col" data-filter="interval">Интервал</button>
+            <button type="button" class="filter-button col filter-button-common" data-filter="interval">Интервал</button>
         </div>
         <div class="col d-flex justify-content-center align-items-center date">
             <span></span>
             <label for="startDate">с</label>
-            <input id="startDate" class="form-control" type="date" />
+            <input id="startDate" class="form-control start-date" type="date" />
         </div>
         <div class="col d-flex justify-content-center align-items-center date">
             <span></span>
             <label for="endDate">по</label>
-            <input id="endDate" class="form-control" type="date" />
+            <input id="endDate" class="form-control end-date" type="date" />
         </div>
     </div>
-    <div class="adaptive-filter">
+    <div class="adaptive-filter filter-common">
         <div class="nav-link adaptive-filter-button dropdown" data-bs-toggle="dropdown" aria-expanded="false">Выберите фильтр</div>
         <ul class="dropdown-content dropdown-menu">
-            <li class="">
-                <button type="button" class="dropdown-item rounded-top">Сегодня</button>
+            <li>
+                <button type="button" class="dropdown-item rounded-top filter-button-common" data-filter="today">Сегодня</button>
             </li>
             <li>
-                <button type="button" class="dropdown-item">Неделя</button>
+                <button type="button" class="dropdown-item filter-button-common" data-filter="week">Неделя</button>
             </li>
             <li>
-                <button type="button" class="dropdown-item">Месяц</button>
+                <button type="button" class="dropdown-item filter-button-common" data-filter="month">Месяц</button>
             </li>
             <li>
-                <button type="button" class="dropdown-item">Год</button>
+                <button type="button" class="dropdown-item filter-button-common" data-filter="year">Год</button>
             </li>
             <li>
-                <button type="button" class="dropdown-item rounded-bottom">Все</button>
+                <button type="button" class="dropdown-item rounded-bottom filter-button-common" data-filter="all">Все</button>
             </li>
         </ul>
-        <div class="dates row row-gap-4 mt-3">
-            <div class="d-flex justify-content-center align-items-center date col">
-                <span>c </span>
-                <a href="javascript:void(0)" class="ps-2 text-secondary">Дата</a>
-            </div>
-            <div class="d-flex justify-content-center align-items-center date col">
-                <span>c </span>
-                <a href="javascript:void(0)" class="ps-2 text-secondary">Дата</a>
-            </div>
+        <div class="col d-flex justify-content-center align-items-center date">
+            <span></span>
+            <label for="startDate">с</label>
+            <input id="startDateFilter" class="form-control start-date" type="date" />
+        </div>
+        <div class="col d-flex justify-content-center align-items-center date">
+            <span></span>
+            <label for="endDate">по</label>
+            <input id="endDateFilter" class="form-control end-date" type="date"/>
         </div>
     </div>
     <div class="main-content d-flex align-items-center row-cols-md-3 row-cols-1 container justify-content-around">

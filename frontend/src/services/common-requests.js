@@ -196,7 +196,7 @@ export class CommonRequests {
     /** Функция добавляет возможность работы с фильтрами. */
     static getOperationsWithFilter(income = null, expense = null) {
         try {
-            const filerButtons = document.querySelectorAll('.filter .filter-button');
+            const filerButtons = document.querySelectorAll('.filter-common .filter-button-common');
 
             filerButtons.forEach(filterButton => {
                 filterButton.addEventListener('click', async () => {
@@ -218,8 +218,8 @@ export class CommonRequests {
 
                     } else if (filterButton.hasAttribute('data-filter')
                         && filterButton.getAttribute('data-filter') === 'interval') {
-                        const startDateElement = document.getElementById('startDate');
-                        const endDateElement = document.getElementById('endDate');
+                        const startDateElement = document.querySelector('.start-date');
+                        const endDateElement = document.querySelector('.end-date');
 
                         endDateElement.addEventListener('input', async () => {
                             let result = await CustomHttp.request(config.host + '/operations?period=interval&dateFrom='
