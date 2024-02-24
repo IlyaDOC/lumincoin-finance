@@ -75,12 +75,13 @@ export class Navbar {
 
     async getBalance() {
         try {
+            this.balanceElement.innerText = '';
             const result = await CustomHttp.request(config.host + '/balance');
             if (result) {
                 if (result.error) {
                     throw new Error(result.error)
                 }
-                this.balanceElement.innerText = '';
+
                 this.balanceElement.innerText = `${result.balance} $`;
             }
         } catch (error) {

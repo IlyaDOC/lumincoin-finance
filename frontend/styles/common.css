@@ -230,3 +230,7 @@ body {
     white-space: nowrap;
 }
 
+.date label {
+    margin-right: 10px;
+    font-weight: 500;
+}
