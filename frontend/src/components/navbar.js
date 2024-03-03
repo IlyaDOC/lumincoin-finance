@@ -11,17 +11,24 @@ export class Navbar {
         this.listItems = document.querySelectorAll('#sidebar > .main-part > ul > li a');
         this.clickList = document.querySelectorAll('.click-btn');
         this.balanceElement = document.getElementById('balance');
+        this.sidebarUser = document.getElementById('sidebar-user-name');
+        this.logoutButtonElement = document.getElementById('logout-button');
+
         this.dropdownElement.addEventListener('click', () => {
             this.dropdownElement.classList.toggle('dropdown-active');
         });
+
 
         this.activeStyle();
         this.toggleButton();
         this.navbarSizeChange();
         this.navbarClickClose();
 
+        if (location.hash !== '#/signup' && location.hash !== '#/login') {
+            this.getBalance();
+        }
 
-        this.getBalance();
+        this.logoutButtonToggle();
 
     }
 
@@ -68,15 +75,23 @@ export class Navbar {
 
     async getBalance() {
         try {
+            this.balanceElement.innerText = '';
             const result = await CustomHttp.request(config.host + '/balance');
             if (result) {
                 if (result.error) {
                     throw new Error(result.error)
                 }
+
                 this.balanceElement.innerText = `${result.balance} $`;
             }
         } catch (error) {
             console.log(error)
         }
+    }
+
+    logoutButtonToggle() {
+        this.sidebarUser.addEventListener('click', ()=> {
+            this.logoutButtonElement.classList.toggle('hide');
+        });
     }
 }

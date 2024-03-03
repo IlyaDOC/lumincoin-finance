@@ -1,4 +1,5 @@
 import {Chart} from 'chart.js/auto';
+import {IncomeAndExpenses} from "./income-and-expenses.js";
 
 export class Diagrams {
     constructor() {
@@ -6,13 +7,13 @@ export class Diagrams {
         this.myChart1 = document.getElementById('myChart1');
         this.myChart2 = document.getElementById('myChart2');
 
-        new Chart(this.myChart1, {
+        this.income = new Chart(this.myChart1, {
             type: 'pie',
             data: {
-                labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
+                labels: [],
                 datasets: [{
                     label: "dollars",
-                    data: [12, 19, 3, 5, 2],
+                    data: [],
                     backgroundColor: ['#DC3545', '#FD7E14', '#FFC107', '#20C997', '#0D6EFD'],
                     borderWidth: 1
                 }]
@@ -21,13 +22,13 @@ export class Diagrams {
 
             }
         });
-        new Chart(this.myChart2, {
+        this.expense = new Chart(this.myChart2, {
             type: 'pie',
             data: {
-                labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
+                labels: [],
                 datasets: [{
                     label: 'dollars',
-                    data: [8, 13, 5, 10, 11],
+                    data: [],
                     backgroundColor: ['#DC3545', '#FD7E14', '#FFC107', '#20C997', '#0D6EFD'],
                     borderWidth: 1
                 }]

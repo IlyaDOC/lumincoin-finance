@@ -1,17 +1,34 @@
+import {CustomHttp} from "../services/custom-http.js";
+import config from "../../config/config.js";
+import {UrlManager} from "../utils/url-manager.js";
+import {CommonRequests} from "../services/common-requests.js";
+
 export class Income {
     constructor() {
-        this.editButtons = document.querySelectorAll('.income .categories .category .category-buttons .edit');
-        this.editButtons.forEach(editButton => {
-            editButton.addEventListener('click', ()=> {
-                location.href = '#/income/edit';
-            })
-        });
-
         this.addButton = document.getElementById('add');
+
+
         if (this.addButton) {
-            this.addButton.addEventListener('click', ()=> {
+            this.addButton.addEventListener('click', () => {
                 location.href = '#/income/create';
             });
         }
+
+
+        this.init('income');
     }
+    async init(path) {
+        if (location.hash === '#/income') {
+            await CommonRequests.getCategories(path);
+            await CommonRequests.deleteCategory(path);
+        }
+        if (location.hash !== '#/income' && location.hash !== '#/expenses'
+            && location.hash !== '#/income/create' && location.hash !== '#/expenses/create') {
+            await CommonRequests.editCategory(path);
+        }
+
+        if (location.hash === '#/income/create') {
+            await CommonRequests.addCategory(path);
+        }
+    };
 }

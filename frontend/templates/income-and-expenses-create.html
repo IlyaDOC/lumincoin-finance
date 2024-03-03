@@ -1,13 +1,30 @@
-<section class="content" id="section">
-  <h1 class="content-header">Создание дохода/расхода</h1>
-  <input type="text" class="form-control my-input-group" placeholder="Тип...">
-  <input type="text" class="form-control my-input-group" placeholder="Категория...">
-  <input type="text" class="form-control my-input-group" placeholder="Сумма в $...">
-  <input type="text" class="form-control my-input-group" placeholder="Дата...">
-  <input type="text" class="form-control my-input-group" placeholder="Комментарий...">
-  <div class="create-buttons" style="margin-top: 20px">
-      <div class="create-button create btn btn-success my-btn">Сохранить</div>
-      <div class="create-button cancel btn btn-danger my-btn">Отмена</div>
-  </div>
+<section class="content ie-create" id="section">
+    <h1 class="content-header">Создание дохода/расхода</h1>
+    <form action="#" class="needs-validation form">
+        <div>
+            <select name="typeOf" id="typeOf" class="my-input-group select form-control" required>
+                <option selected hidden value="">Тип...</option>
+                <option name="typeOf" value="income">Доход</option>
+                <option name="typeOf" value="expense">Расход</option>
+            </select>
+        </div>
+        <div>
+            <select name="category" id="category" class="my-input-group select form-control" required>
+                <option selected hidden value="">Категория...</option>
+            </select>
+        </div>
+        <div>
+            <input type="text" class="form-control my-input-group" placeholder="Сумма в $..." id="amount" required>
+        </div>
+        <div>
+            <input type="date" class="form-control my-input-group" placeholder="Дата..." id="date" required>
+        </div>
+        <div>
+            <input type="text" class="form-control my-input-group" placeholder="Комментарий..." id="comment" required>
+        </div>
+        <div class="create-buttons" style="margin-top: 20px">
+            <button type="button" class="create-button create btn btn-success my-btn" id="confirm-button">Сохранить</button>
+            <a class="create-button cancel btn btn-danger my-btn" href="#/income-and-expenses">Отмена</a>
+        </div>
+    </form>
 </section>
-</div>
